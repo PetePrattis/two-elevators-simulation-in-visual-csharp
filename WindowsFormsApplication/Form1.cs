@@ -12,17 +12,17 @@ namespace WindowsFormsApplication5
         {
             InitializeComponent();
 
-            //το elevator 1 ειναι το ασανσερ στα αριστερα, ενώ το 2ο το ασανσέρ στα δεξιά
-            elevator2arrival.Visible = false;//το picturebox με την εικόνα gif του elevator 1
-            elevator1arrival.Visible = false;//για το 2ο
+            // elevator 1 is the elevator on the left, while the 2nd elevator is on the right
+            elevator2arrival.Visible = false;// the picturebox with the elevator gif image 1
+            elevator1arrival.Visible = false;//for the second
 
-            floor0l1.Load("http://i.imgur.com/NhZPt6q.png");//το φωτάκι του 1ου ασανσέρ στο ισόγειο είναι αναμμένο αφού απο εκεί ξεκινάνε
-            floor1l1.Load("http://i.imgur.com/8Vws7O1.png");//τα υπόλοιπα φώτα είναι κλειστά
+            floor0l1.Load("http://i.imgur.com/NhZPt6q.png");// the 1st elevator light on the ground floor is turned on, because they are there at the start
+            floor1l1.Load("http://i.imgur.com/8Vws7O1.png");//rest lights are turned off
             floor2l1.Load("http://i.imgur.com/8Vws7O1.png");
             floor3l1.Load("http://i.imgur.com/8Vws7O1.png");
             floor4l1.Load("http://i.imgur.com/8Vws7O1.png");
 
-            floor0l2.Load("http://i.imgur.com/NhZPt6q.png");//τα φώτα για το 2ο ασανσέρ
+            floor0l2.Load("http://i.imgur.com/NhZPt6q.png");//lights for the second elevator
             floor1l2.Load("http://i.imgur.com/8Vws7O1.png");
             floor2l2.Load("http://i.imgur.com/8Vws7O1.png");
             floor3l2.Load("http://i.imgur.com/8Vws7O1.png");
@@ -30,18 +30,18 @@ namespace WindowsFormsApplication5
         }
 
         #region General
-        public static int[] floors1 = { 0, 1, 2, 3, 4 };//μια μήτρα που θα σώζει τους ορόφους όπου βρίσκεται το ασανσέρ
+        public static int[] floors1 = { 0, 1, 2, 3, 4 };// a matrix that will save the floors where the elevator is located
         public static int[] floors2 = { 0, 1, 2, 3, 4 };
-        int[,] loc1 = new int[5, 2];//η μήτρα με τις τοποθεσίες του Gif του ασανσέρ
+        int[,] loc1 = new int[5, 2];// the matrix with the elevator Gif locations
         int[,] loc2 = new int[5, 2];
-        public static int elevfl1;//η μεταβλητή που θα σώζει σε ποιόν όροφο βρίσκεται το ασανσερ
+        public static int elevfl1;// the variable to save on which floor the elevator is located
         public static int elevfl2;
 
         
-        //αυτή η δισδιάστατη μήτρα θα σώζει αρχικά στην 1η διάσταση της τον όροφο της κλήσης
-        //και στη 2η διάσταση της πόσες επαναλήψεις περιμένει η κάθε κλήση
-        //μέγεθος 13 όσα και τα κουμπιά στην εφαρμογή
-        public static int[,] call1 = new int[,] { { -1, 0 },//αρχικοποιώ με -1 τους ορόφους αφού δεν υπάρχουν κλήσεις
+        // this 2D matrix will initially save the 1st floor of the call floor
+        // and in the 2nd dimension of how many repetitions each call awaits
+        // size 13 whatever buttons in the application
+        public static int[,] call1 = new int[,] { { -1, 0 },// initialize with -1 floors since there are no calls
             { -1, 0 },
             { -1, 0 },
             { -1, 0 },
@@ -73,8 +73,8 @@ namespace WindowsFormsApplication5
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            //αρχικοποιώ τις τοποθεσίες όπου θα εμφανίζεται το gif του ασανσέρ
-            //για το 1ο ασανσέρ
+            // initialize the locations where the elevator gif will appear
+            // for the 1st elevator
             loc1[0, 0] = 168 + 74;//the X
             loc1[0, 1] = 554;//the Y
             loc1[1, 0] = 168 + 74;
@@ -86,7 +86,7 @@ namespace WindowsFormsApplication5
             loc1[4, 0] = 168 + 74;
             loc1[4, 1] = 80;
 
-            //για το 2ο ασανσέρ
+            //for the 2nd elevator
             loc2[0, 0] = 306 + 74;//the X
             loc2[0, 1] = 554;//the Y
             loc2[1, 0] = 306 + 74;
@@ -98,14 +98,14 @@ namespace WindowsFormsApplication5
             loc2[4, 0] = 306 + 74;
             loc2[4, 1] = 80;
 
-            //αρχικοποιούμε τα ασανσέρ στο ισόγειο
+            // we initialize the elevators on the ground floor
             elevator1arrival.Location = new Point(loc1[0, 0], loc1[0, 1]);
             elevfl1 = floors1[0];
 
             elevator2arrival.Location = new Point(loc2[0, 0], loc2[0, 1]);
             elevfl2 = floors2[0];
 
-            callchecker1.Start();//ξεκινάω την διαδικασία ελέγχου για κλήση
+            callchecker1.Start();// start the check procedure for a call
             callchecker2.Start();
         }
 
@@ -118,16 +118,16 @@ namespace WindowsFormsApplication5
                 , "Simulator's Information");
         }
 
-        WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();//με την βοήθεια του windows media player θα παίζω τους 2 ήχους ανοίγματος της πόρτας του ασανσέρ
-        WMPLib.WindowsMediaPlayer wplayer2 = new WMPLib.WindowsMediaPlayer();//δημιουργώ αντικείμενο του windows media player 2 φορές
+        WMPLib.WindowsMediaPlayer wplayer = new WMPLib.WindowsMediaPlayer();// with the help of windows media player i will play the 2 sounds of elevator door opening
+        WMPLib.WindowsMediaPlayer wplayer2 = new WMPLib.WindowsMediaPlayer();// create windows media player object 2 times
 
-        private void timerarrival1_Tick(object sender, EventArgs e)//σε αυτό το Timer θα εμφανίζω το Gif του 1ου ασανσέρ
+        private void timerarrival1_Tick(object sender, EventArgs e)// in this Timer I will display the Gif of the 1st elevator
         {//5 δευτερόλεπτα
             
             elevator1arrival.Visible = false;
             timerarrival1.Stop();
         }
-        private void timerarrival2_Tick(object sender, EventArgs e)//του 2ου ασανσέρ
+        private void timerarrival2_Tick(object sender, EventArgs e)//for the 2nd elevator
         {
             
             elevator2arrival.Visible = false;
@@ -136,16 +136,16 @@ namespace WindowsFormsApplication5
         }
    
 
-        public static int flag1 = -1;//Pointers που δείχνουν πόσες κλήσεις υπάρχουν, για το 1ο ασανσέρ
-        public static int flag2 = -1;//για το 2ο
+        public static int flag1 = -1;// Pointers showing how many calls there are for the 1st elevator
+        public static int flag2 = -1;// for the 2nd
 
         #region Buttons1
-        //στο πάτημα των κουμπιών καλώ μέθοδο και περνάω μια τιμή, τον όροφο την κλήσης-κουμπιού
-        //αυτλα είναι τα κουμπιά μέσα στο 1ο ασανσέρ
+        // pressing buttons call method and pass a value, the call-button floor
+        // these keys are the buttons inside the 1st elevator
         private void elevator1f0_Click(object sender, EventArgs e)
         {
-            Queue1(0);//καλώ την μέθοδο
-            elevator1f0.Enabled = false;//δεν μπορείς να ξανακάνεις την ίδια κλήση μέχρι να απαντηθεί
+            Queue1(0);//call the method
+            elevator1f0.Enabled = false;// you can't make the same call again until it is answered
         }
 
         private void elevator1f1_Click(object sender, EventArgs e)
@@ -174,8 +174,8 @@ namespace WindowsFormsApplication5
         #endregion
 
         #region Buttons2
-        //αυτά είναι τα κουμπιά μέσα στο 2ο ασανσέρ
-        //καλώ μια 2η μέθοδο και περνάω την τιμή του ορόφου
+        // these are the buttons inside the 2nd elevator
+        // call a 2nd method and pass the floor value
         private void elevator2f0_Click_1(object sender, EventArgs e)
         {
             elevator2f0.Enabled = false;
@@ -210,22 +210,22 @@ namespace WindowsFormsApplication5
 
         #region Floor Buttons
 
-        //τα κουμπιά που βρίσκονται στους ορόφους
-        //θα ελέγχω ποιό ασανσέρ είναι πιο κοντά στην κλήση ή αν είναι εξίσου κοντά το 1ο ασανσέρ πηγαίνει ούτως ή άλλως
-        //και μετά καλώ την αντίστοιχη μέθοδο
+        // the buttons on the floors
+        // I'll check which elevator is closer to the call or if the 1st elevator is as close as the 2nd it goes by default
+        // and then call the corresponding method
         private void floor0bu_Click(object sender, EventArgs e)
         {
-            if(elevfl1 == elevfl2 && elevfl1 == 0)//αν τα ασανσέρ βρίσκονται στον ίδιο όροφο
+            if(elevfl1 == elevfl2 && elevfl1 == 0)// if the elevators are on the same floor
             {
                 Queue1(0);
                 floor0bu.Enabled = false;
             }
-            else if(Math.Abs(elevfl1 - 0) <= Math.Abs(elevfl2 - 0))//αν το 1ο ασανσέρ είναι πιο κοντά ή αν και τα 2 ασανσέρ είναι εξίσου κοντά, το 1ο θα απαντήσει την κλήση
+            else if(Math.Abs(elevfl1 - 0) <= Math.Abs(elevfl2 - 0))// if the 1st elevator is closer or if the 2 elevators are even closer, the 1st will answer the call
             {
                 Queue1(0);
                 floor0bu.Enabled = false;
             }
-            else if(Math.Abs(elevfl1 - 0) > Math.Abs(elevfl2 - 0))//αν το 2ο ασανσέρ είναι πιο κοντά τότε αυτό θα απαντήσει την κλήση
+            else if(Math.Abs(elevfl1 - 0) > Math.Abs(elevfl2 - 0))// if the 2nd elevator is closer then this will answer the call
             {
                 Queue2(0);
                 floor0bu.Enabled = false;
@@ -369,19 +369,19 @@ namespace WindowsFormsApplication5
         #endregion
 
 
-        public void Queue1(int x)//αυτή είναι η μέθοδος η οποία φτιάχνει την σειρά των κλήσεων όταν δημιουργούνται
-        {//το x είναι ο όροφος της κλήσης
+        public void Queue1(int x)// this is the method that makes the order of calls when they are made
+        {// x is the floor of the call
             
             int a, b;
 
             call1[flag1 + 1, 0] = x;
-            if (flag1 != -1)//αν δεν είναι η 1η κλήση
+            if (flag1 != -1)//if not 1st call
             {
-                for (int i = flag1 + 1; i >= 1; i--)//έλεγχος για όσες κλήσης υπάρχουν
+                for (int i = flag1 + 1; i >= 1; i--)// check for calls that exist
                 {
                     if (Math.Abs(call1[i - 1, 0] - elevfl1) > Math.Abs(call1[i, 0] - elevfl1))
-                    {//αν ο όροφος της νές κλήσης είναι πιο κοντά από τον όροφο της προηγούμενης κλήσης
-                     //αυτές οι 2 κλήσεις ανταλλάζουν θέση
+                    {// if the call floor is closer than the floor of the previous call
+                        // these 2 calls exchange location
                         a = call1[i - 1, 0];
                         call1[i - 1, 0] = call1[i, 0];
                         call1[i, 0] = a;
@@ -390,14 +390,14 @@ namespace WindowsFormsApplication5
                         call1[i, 1] = b;
                     }
                     else if (call1[i, 0] == call1[i - 1, 0])
-                    {//αν οι κλήσεις είναι απο τον ίδιο όροφο (άλλο κουμπί) μετράνε ως μια
-                     //άρα τίποτα δεν συμβαίνει
+                    {// if the calls are from the same floor (other button) count as one
+                      // so nothing happens
                     }
-                    else//αλλιώς στην επόμενη επανάληψη
+                    else//else at next iteration
                         break;
                 }
                 for (int i = 0; i <= flag1 + 1; i++)
-                {//εδώ θα ελέγχω αν υπάρχουν κλήσεις στον ίδιο όροφο και θα διαγράφω τις έξτρα κλήσεις
+                {// here I will check if there are calls on the same floor and delete the extra calls
                     if (call1[i, 0] == call1[i + 1, 0])
                     {
                         int z, o;
@@ -414,10 +414,10 @@ namespace WindowsFormsApplication5
             }
             flag1++;
 
-            printer();//εμφανίζω τις κλήσεις με την σειρά
+            printer();// show the calls in order
         }
 
-        public void Queue2(int x)//αυτή είναι η ίδια μέθοδος με την Queue1 για την λίστα των κλήσεων του 2ου ασανσέρ
+        public void Queue2(int x)// this is the same method as Queue1 for the 2nd elevator call list
         {
             int a, b;
 
@@ -470,32 +470,32 @@ namespace WindowsFormsApplication5
             printer();
         }
 
-        private void callchecker1_Tick(object sender, EventArgs e)//timer που ελέγχει αν υπάρχει 1η κλήση στην λίστα με τις κλήσεις
+        private void callchecker1_Tick(object sender, EventArgs e)// timer that checks if there is a 1st call in the call list
         {
             if (call1[0, 0] != -1 && !timerarrival1.Enabled )
             {
-                movement1.Start();//ο timer στον οποίο εκτελούνται οτι συμβαίνουν κατα την διάρκεια της κίνησης του ασανσέρ
+                movement1.Start();// the timer in which they occur during the elevator movement
             }
         }
 
-        //το όνομα του ειναι movement1, δεν φαίνεται γιατί έκανα μετονομασία και δεν ανανεώθηκε
-        private void movement_Tick(object sender, EventArgs e)//ο timer στον οποίο εκτελούνται οτι συμβαίνουν κατα την διάρκεια της κίνησης του ασανσέρ
-        {//π.χ. η αλλαγή των ορόφων, το άναμμα των λαμπών κλπ
+        // its name is movement1, it doesn't look like I renamed and was not renewed
+        private void movement_Tick(object sender, EventArgs e)// the timer in which they occur during the elevator movement
+        {//example the change of floors, the lighting of lamps, etc.
 
-            Check_Waits1(call1);//μέθοδος που ελέγχει αν υπάρχει κλήση που περιμένει πάνω απο 10 επαναλήψεις
+            Check_Waits1(call1);// method to check if there is a call waiting for more than 10 repetitions
 
-            Turn_Lights1(elevfl1);//μέθοδος που ανάβει τις λάμπες
-            if (call1[0, 0] == elevfl1)//αν η 1η κλήση βρίσκεται στον ίδιο όροφο με το ασανσέρ
+            Turn_Lights1(elevfl1);// method of lighting the lamps
+            if (call1[0, 0] == elevfl1)// if the 1st call is on the same floor as the elevator
             {
-                movement1.Stop();//σταματάει αυτή η διαδικασία
-                elevator1arrival.Location = new Point(loc1[call1[0, 0], 0], loc1[call1[0, 0], 1]);//μετακίνηση του gif pictureBox
-                elevator1arrival.Visible = true;//εμφάνισή του
-                timerarrival1.Start();//εκκίνηση του timer των 5 δευετρολέπτων που είναι για το gif
-                wplayer.URL = "elev.mp3";//παίζει η μουσική, το αρχείο βρίσκεται στον ίδιο φάκελο με το .exe
+                movement1.Stop();//stop the procedure
+                elevator1arrival.Location = new Point(loc1[call1[0, 0], 0], loc1[call1[0, 0], 1]);// move the gif pictureBox
+                elevator1arrival.Visible = true;//show it
+                timerarrival1.Start();// start the 5 second timer for gif
+                wplayer.URL = "elev.mp3";// the music is playing, the file is in the same folder as the .exe
                 wplayer.controls.play();
-                Remove_Call1(call1);//αφού πραγματοποιηθεί η 1η κλήση την αφαιρώ καλώντας αυτην την μέθοδο
+                Remove_Call1(call1);// after the 1st call is made I remove it by calling this method
 
-                //στον όροφο της κλήσης τα κουμπιά γίνονται ξανα enabled με την απάντηση της κλήσης
+                // On the floor of the call buttons are re-enabled by answering the call
                 if (elevfl1 == 0)
                 {
                     elevator1f0.Enabled = true;
@@ -525,29 +525,28 @@ namespace WindowsFormsApplication5
                     floor4bd.Enabled = true;
                 }
 
-                Circle1(call1);//αυτή η μέθοδος προσθαίτει 1 επανάληψη, δηλαδή πόσο πολύ περιμένει η κάθε κλήση για να πραγματοποιηθεί
-
+                Circle1(call1);// this method adds 1 repeat, that is how long each call waits for
             }
-            else//αν ακόμα δεν βρίσκεται το ασανσέρ στον όροφο της κλήσης
+            else// if the elevator is still not on the call floor
             {
-                if (elevfl1 == 0)//αν το ασανσέρ βρίσκεται στον 1ο όροφο
+                if (elevfl1 == 0)// if the elevator is on the 1st floor
                 {
-                    floor0l1.Load("http://i.imgur.com/NhZPt6q.png");//ανάβει το φως
-                    if (call1[0, 0] > elevfl1)//με αυτό το if θα βλέπω αν το ασανσέρ είναι να πάει προς τα πάνω ή προς τα κάτω
-                    {//από το ισόγειο μόνο πάνω πάει
-                        elevfl1++;//έτσι το ασανσέρ πάει στον επόμενο όροφο
+                    floor0l1.Load("http://i.imgur.com/NhZPt6q.png");//turn on light
+                    if (call1[0, 0] > elevfl1)// with this if i will see if the elevator is going up or down
+                    {// just goes up from the ground floor
+                        elevfl1++;// so the elevator goes to the next floor
                     }
                 }
                 else if (elevfl1 == 1)
                 {
                     floor1l1.Load("http://i.imgur.com/NhZPt6q.png");
-                    if (call1[0, 0] > elevfl1)//αν πηγαίνει προς τα πάνω
+                    if (call1[0, 0] > elevfl1)// if it goes up
                     {
                         elevfl1++;
                     }
                     else if (call1[0, 0] < elevfl1)
                     {
-                        elevfl1--;//αν πηγαίνει προς τα κάτω
+                        elevfl1--;// if it goes down
                     }
                 }
                 else if (elevfl1 == 2)
@@ -578,32 +577,32 @@ namespace WindowsFormsApplication5
                 {
                     floor4l1.Load("http://i.imgur.com/NhZPt6q.png");
                     if (call1[0, 0] < elevfl1)
-                    {//από τον 4ο όροφο μόνο κάτω πάει
+                    {//from 4th floor only downwards
                         elevfl1--;
                     }
                 }
 
-                Circle1(call1);//αυτή η μέθοδος προσθαίτει 1 επανάληψη, δηλαδή πόσο πολύ περιμένει η κάθε κλήση για να πραγματοποιηθεί
+                Circle1(call1);// this method adds 1 repeat, that is how long each call waits for
 
             }
-            Check_Waits1(call1);//μέθοδος που ελέγχει αν υπάρχει κλήση που περιμένει πάνω απο 10 επαναλήψεις
+            Check_Waits1(call1);// method to check if there is a call waiting for more than 10 repetitions
 
-            printer();//εμφανίζει τις κλήσεις με την σειρά
-            callchecker1.Start();//ξεκινάει ξανά ο Timer ελέγχου αν υπάρζει μια 1η κλήση
+            printer();// shows the calls in order
+            callchecker1.Start();// the Timer checks again if there is a 1st call
 
         }
 
-        private void callchecker2_Tick(object sender, EventArgs e)//έλεγχος αν υπάρζει μια 1η κλήση για το 2ο ασανσέρ
+        private void callchecker2_Tick(object sender, EventArgs e)// check if there is a 1st call for the 2nd elevator
         {
             if (call2[0, 0] != -1 && !timerarrival2.Enabled)
             {
-                movement2.Start();//ο αντίστοιχος timer για το 2ο ασανσέρ πραγματοποίησης της κίνησης
+                movement2.Start();// the corresponding timer for the 2nd elevator
                
             }
         }
       
         private void movement2_Tick(object sender, EventArgs e)
-        {//τα ίδια με το movement1_Tick
+        {//same as movement1_Tick
             Check_Waits2(call2);
 
             Turn_Lights2(elevfl2);
@@ -723,7 +722,7 @@ namespace WindowsFormsApplication5
 
         #region Methods
 
-        public void printer()//εμφανίζει τις κλήσεις με την σειρά και τον όροφο στον οποίο βρίσκεται το ασανσέρ
+        public void printer()// shows the calls in the order and floor where the elevator is located
         {
             string fl1, w1, fl2, w2;
             
@@ -767,7 +766,7 @@ namespace WindowsFormsApplication5
 
 
 
-        public void Turn_Lights1(int f)//για το 1ο ασανσέρ οι μέθοδοι με τον αριθμό 1 
+        public void Turn_Lights1(int f)// for the 1st elevator the methods numbered 1
         {
 
             //τα φώτα όλα off 
@@ -778,7 +777,7 @@ namespace WindowsFormsApplication5
             floor3l1.Load("http://i.imgur.com/8Vws7O1.png");
             floor4l1.Load("http://i.imgur.com/8Vws7O1.png");
 
-            if (f == 0)//ανάβω το φώς του ορόφου στον οποίο βρίσκεται τ οασανσέρ
+            if (f == 0)// turn on the floor light where the elevator is located
                 floor0l1.Load("http://i.imgur.com/NhZPt6q.png");
             else if (f == 1)
                 floor1l1.Load("http://i.imgur.com/NhZPt6q.png");
@@ -791,23 +790,23 @@ namespace WindowsFormsApplication5
        }
 
         
-        public void Check_Waits1(int[,] call1)//μέθοδος που ελέγχει αν υπάρχει κάποια κλήση που να περιμένει 10 επαναλήψεις για να απντηθεί
-        //και αναδιοργανώνω την σειρά ώστε αυτη η κλήση που περιμένη να απντηθεί 1η
+        public void Check_Waits1(int[,] call1)// method to check if there is a call waiting for 10 repetitions to answer
+        // and rearrange the order that this expected call is answered 1st
         {
             int a, b, x, y;
             for (int i = 0; i <= flag1; i++)
-                if (call1[i, 1] >= 10)//αν υπάρχει κλήση που περιμένει 10+ φορές
+                if (call1[i, 1] >= 10)// if there is a call waiting 10+ times
                 {
-                    x = call1[i, 0];//σώζω τις πληροφορίες αυτής της κλήσης
+                    x = call1[i, 0];// save this call information
                     y = call1[i, 1];
                     for (int j = i; i <= 11; i++)
-                    {//την διαγράφω και μεταφέρω τις υπόλοιπες κλήσεις που είναι πιο μακρυα απο την απαντησή τους, 1 θέση πιο κοντά
+                    {// delete it and move other calls that are farther away, 1 place closer
                         a = call1[j + 1, 0];
                         b = call1[j + 1, 1];
                         call1[j, 0] = a;
                         call1[j, 1] = b;
                     }
-                    //την κλήση που περίμενε 12+ φορές την βάζω 1η και μεταφέρω όλες τις υπολοιπες κλήσεις μια θέση πιο μακρυά
+                    // the call that was waiting 12+ times I put it 1st and move all the other calls one place farther
                     for (int u = flag1 + 1; u >= 1; u--)
                     {
                         call1[u, 0] = call1[u - 1, 0];
@@ -816,13 +815,13 @@ namespace WindowsFormsApplication5
                     call1[0, 0] = x;
                     call1[0, 1] = y;
 
-                    elevfl1 = floors1[call1[0, 0]];//ορίζω ως τον όροφο του ασανσέρ τον όροφο της κλήσης αυτής ώστε να πάει εκεί αμέσως
-                    //ωστόσο η κίνηση του ασανσέρ δεν φαίνεται διότι πάει κατευθείαν στην επόμενη επανάληψη σε αυτόν τον όροφο                          
+                    elevfl1 = floors1[call1[0, 0]];// set up the elevator floor the floor of this call to go there immediately
+                     // however the elevator movement does not appear because it goes straight to the next iteration on this floor                         
                     for (int j = flag1; j >= 1; j--)
-                    {//πρέπει να φτάξω ξανά την σειρά αφού μπορεί όροφοι που ήταν πιο μακρύα πριν, τώρα να είναι πιο κοντά και θα πρέπει να απντηθούν πρώτοι
+                    {// I need to get back in order since it may have floors that were farther back now, now they are closer and need to be answered first
                         if (Math.Abs(call1[j - 1, 0] - elevfl1) > Math.Abs(call1[j, 0] - elevfl1))
-                        {//αν ο όροφος της κλήσης είναι πιο κοντά από τον όροφο της προηγούμενης κλήσης
-                         //ανταλλάζουν θέση
+                        {// if the call floor is closer than the floor of the previous call
+                          // swap position
                             a = call1[j - 1, 0];
                             call1[j - 1, 0] = call1[j, 0];
                             call1[j, 0] = a;
@@ -835,7 +834,7 @@ namespace WindowsFormsApplication5
                 
         }
 
-        public void Remove_Call1(int[,] call1)//μια μέθοδος που διαγράφει την 1η κλήση μετά την απάντηση της
+        public void Remove_Call1(int[,] call1)// a method that deletes the 1st call after answering it
         {
             int a, b;
             for (int i = 0; i <= 11; i++)
@@ -849,7 +848,7 @@ namespace WindowsFormsApplication5
 
         }
 
-        public void Circle1(int[,] call1)//μια μέθοδος που προσθέτει +1 στην 2η διάσταση της μήτρας call1 το όποιο μετράει πόσες επαναλήψεις περιμένει
+        public void Circle1(int[,] call1)// a method that adds +1 to the 2nd dimension of the call1 matrix which counts how many repetitions it expects
         {
             for (int i = 0; i <= 12; i++)
             {
@@ -858,7 +857,7 @@ namespace WindowsFormsApplication5
             }
         }
 
-        public void Turn_Lights2(int f)//αντίστοιχες μέθοδοι για το 2ο ασανσέρ
+        public void Turn_Lights2(int f)// corresponding methods for the 2nd elevator
         {
             
                 
